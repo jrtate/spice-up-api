@@ -1,20 +1,16 @@
 import {
-  CreateCompletedTaskAsync,
-  DeleteCompletedTaskAsync,
   DeleteTaskPsqlAsync,
   InsertTaskAsync,
-  ReadCompletedTaskAsync,
   ReadTaskAsync,
   ReadTasksAsync,
   UpdateTaskAsync,
-  UpsertOrderAsync,
 } from "../Repositories/TasksRepository.js";
 import res from "express/lib/response.js";
 
 export const GetTasksAsync = async () => {
   try {
     const taskList = await ReadTasksAsync();
-    return taskList.rows.map((task) => {
+    return taskList?.rows?.map?.((task) => {
       return {
         id: task.id,
         description: task.description,
@@ -103,73 +99,6 @@ export const DeleteTaskAsync = async (id) => {
       return res.sendStatus(400).send("Must provide an ID.");
     }
     return await DeleteTaskPsqlAsync(id);
-  } catch (e) {
-    console.log(e.message);
-  }
-};
-
-export const GetCompletedTasksAsync = async (id) => {
-  try {
-    const completedTaskList = await ReadCompletedTaskAsync(id);
-    return completedTaskList.rows.map((completedTask) => {
-      return {
-        id: completedTask.id,
-        completedDay: completedTask.completed_day,
-      };
-    });
-  } catch (e) {
-    console.log(e.message);
-  }
-};
-
-export const CompleteTaskAsync = async (completedTask) => {
-  try {
-    if (!completedTask.id) {
-      return res.sendStatus(400).send("Must provide an ID.");
-    }
-    if (!completedTask.completedDay) {
-      return res.sendStatus(400).send("Must provide completedDay.");
-    }
-    const isCompleted = ReadCompletedTaskAsync(completedTask.id);
-    if (!isCompleted) {
-      return res.sendStatus(204);
-    }
-
-    return await CreateCompletedTaskAsync(completedTask);
-  } catch (e) {
-    console.log(e.message);
-  }
-};
-
-export const UnCompleteTaskAsync = async (id) => {
-  try {
-    if (!id) {
-      return res.sendStatus(400).send("Must provide an ID.");
-    }
-    const isCompleted = ReadCompletedTaskAsync(id);
-    if (!isCompleted) {
-      return res.sendStatus(204);
-    }
-
-    return await DeleteCompletedTaskAsync(id);
-  } catch (e) {
-    console.log(e.message);
-  }
-};
-
-export const UpsertTaskOrderAsync = async (taskOrders) => {
-  try {
-    for (const taskOrder of taskOrders) {
-      if (!taskOrder.taskId) {
-        return res.sendStatus(400).send("Must provide a taskId.");
-      }
-      if (!taskOrder.order) {
-        return res.sendStatus(400).send("Must provide an order.");
-      }
-    }
-
-    return await Promise.all(await UpsertOrderAsync(taskOrders));
-    // return Promise.all(result);
   } catch (e) {
     console.log(e.message);
   }

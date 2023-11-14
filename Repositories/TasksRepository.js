@@ -40,33 +40,3 @@ export const UpdateTaskAsync = async (id, task) => {
 export const DeleteTaskPsqlAsync = async (id) => {
   return await pool.query("DELETE FROM tasks WHERE id=$1 RETURNING *;", [id]);
 };
-
-export const ReadCompletedTaskAsync = async (id) => {
-  return await pool.query("SELECT * FROM completed_tasks WHERE task_id=$1;", [
-    id,
-  ]);
-};
-
-export const CreateCompletedTaskAsync = async (completedTask) => {
-  return await pool.query(
-    "INSERT INTO completed_tasks (task_id, completed_day) VALUES ($1, $2) RETURNING *;",
-    [completedTask.id, completedTask.completedDay],
-  );
-};
-
-export const DeleteCompletedTaskAsync = async (id) => {
-  return await pool.query(
-    "DELETE FROM completed_tasks WHERE task_id=$1 RETURNING *;",
-    [id],
-  );
-};
-
-export const UpsertOrderAsync = async (taskOrders) => {
-  return taskOrders.map(
-    async (taskOrder) =>
-      await pool.query(
-        "INSERT INTO  task_orders (task_id, task_order) VALUES($1,$2) ON CONFLICT (task_id) WHERE (task_id = $1) DO UPDATE SET task_order = $2;",
-        [taskOrder.taskId, taskOrder.order],
-      ),
-  );
-};

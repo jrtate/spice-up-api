@@ -4,6 +4,8 @@ import TaskRouter from "./Controllers/TasksController.js";
 import UserRouter from "./Controllers/UsersController.js";
 import oAuth2Server from "node-oauth2-server";
 import TokenService from "./Services/TokenService.js";
+import OrderRouter from "./Controllers/OrderController.js";
+import TaskCompletionRouter from "./Controllers/TaskCompletionController.js";
 
 // Leverages heroku server assigned port; may change
 const PORT = process.env.PORT || 5000;
@@ -25,6 +27,8 @@ app.use(app.oauth.errorHandler());
 // Routes
 app.use("/auth", UserRouter);
 app.use("/tasks", TaskRouter);
+app.use("/task-completion", TaskCompletionRouter);
+app.use("/order", OrderRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);
