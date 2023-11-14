@@ -159,17 +159,14 @@ export const UnCompleteTaskAsync = async (id) => {
 
 export const UpsertTaskOrderAsync = async (taskOrders) => {
   try {
-    for (const taskOrder of taskOrders) {
-      if (!taskOrder.taskId) {
-        return res.sendStatus(400).send("Must provide a taskId.");
-      }
-      if (!taskOrder.order) {
-        return res.sendStatus(400).send("Must provide an order.");
-      }
+    /*if (taskOrders?.some?.((taskOrder) => !!taskOrder.taskId)) {
+      return res.sendStatus(400).send("Must provide a taskId.");
     }
+    if (taskOrders?.some?.((taskOrder) => !!taskOrder.order)) {
+      return res.sendStatus(400).send("Must provide an order.");
+    }*/
 
-    return await Promise.all(await UpsertOrderAsync(taskOrders));
-    // return Promise.all(result);
+    return Promise.all(await UpsertOrderAsync(taskOrders));
   } catch (e) {
     console.log(e.message);
   }

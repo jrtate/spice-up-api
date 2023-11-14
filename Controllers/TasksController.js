@@ -20,7 +20,7 @@ TaskRouter.get("", async (req, res) => {
     // todo: move to service layer and add to get by id
     const mappedTasks = tasks.map(async (task) => {
       const completedTasks = await GetCompletedTasksAsync(task.id);
-      const matchingCompletedTasks = completedTasks.filter((ct) =>
+      const matchingCompletedTasks = completedTasks?.filter((ct) =>
         task.daysOfWeek.includes(ct.completedDay),
       );
       task.isCompleted = matchingCompletedTasks.length > 0;
@@ -53,8 +53,8 @@ TaskRouter.post("", async (req, res) => {
 
 TaskRouter.put("/order", async (req, res) => {
   try {
-    const result = await UpsertTaskOrderAsync(req.body);
-    return res.json(result.rows);
+    await UpsertTaskOrderAsync(req.body);
+    return res.status(200).json({});
   } catch (e) {
     console.log(e.message);
   }

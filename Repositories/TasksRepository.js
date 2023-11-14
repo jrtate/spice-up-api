@@ -62,7 +62,7 @@ export const DeleteCompletedTaskAsync = async (id) => {
 };
 
 export const UpsertOrderAsync = async (taskOrders) => {
-  return taskOrders.map(
+  return taskOrders?.map?.(
     async (taskOrder) =>
       await pool.query(
         "INSERT INTO  task_orders (task_id, task_order) VALUES($1,$2) ON CONFLICT (task_id) WHERE (task_id = $1) DO UPDATE SET task_order = $2;",
