@@ -3,11 +3,10 @@ import {
   GetCompletedTasksAsync,
   UnCompleteTaskAsync,
 } from "../Services/TaskCompletionService.js";
-import TaskRouter from "./TasksController.js";
 import express from "express";
 
 const TaskCompletionRouter = express.Router();
-TaskRouter.get("/complete/:id", async (req, res) => {
+TaskCompletionRouter.get("/complete/:id", async (req, res) => {
   try {
     const task = await GetCompletedTasksAsync(req.params.id);
     res.json(task);
@@ -16,7 +15,7 @@ TaskRouter.get("/complete/:id", async (req, res) => {
   }
 });
 
-TaskRouter.post("/complete/:id", async (req, res) => {
+TaskCompletionRouter.post("/complete/:id", async (req, res) => {
   try {
     const result = await CompleteTaskAsync(req.body);
     return res.json(result.rows);
@@ -25,7 +24,7 @@ TaskRouter.post("/complete/:id", async (req, res) => {
   }
 });
 
-TaskRouter.delete("/uncomplete/:id", async (req, res) => {
+TaskCompletionRouter.delete("/uncomplete/:id", async (req, res) => {
   try {
     const result = await UnCompleteTaskAsync(req.params.id);
     return res.json(result.rows);
