@@ -29,7 +29,9 @@ CREATE TABLE IF NOT EXISTS task_orders(
   task_order INTEGER NOT NULL,
   CONSTRAINT fk_task_orders_task_id
     FOREIGN KEY(task_id)
-    REFERENCES tasks(id)
+    REFERENCES tasks(id),
+  day_of_week INTEGER NOT NULL,
+  UNIQUE (task_id, day_of_week)
 );
 
 -- Create Oauth 2.0 Tables
