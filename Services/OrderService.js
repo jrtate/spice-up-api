@@ -6,7 +6,7 @@ import {
 export const GetTaskOrdersAsync = async () => {
   try {
     const taskOrders = await ReadTaskOrdersAsync();
-    return taskOrders?.map?.((taskOrder) => {
+    return taskOrders?.rows?.map?.((taskOrder) => {
       return {
         id: taskOrder.id,
         taskId: taskOrder.task_id,

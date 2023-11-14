@@ -10,7 +10,7 @@ import res from "express/lib/response.js";
 export const GetTasksAsync = async () => {
   try {
     const taskList = await ReadTasksAsync();
-    return taskList.rows.map((task) => {
+    return taskList?.rows?.map?.((task) => {
       return {
         id: task.id,
         description: task.description,
