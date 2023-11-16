@@ -34,33 +34,8 @@ CREATE TABLE IF NOT EXISTS task_orders(
   UNIQUE (task_id, day_of_week)
 );
 
--- Create Oauth 2.0 Tables
-CREATE TABLE IF NOT EXISTS public.users
-(
-    id serial,
-    username text,
-    user_password text,
-    PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
+CREATE TABLE IF NOT EXISTS users(
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(128) UNIQUE,
+  password VARCHAR(60)
 );
-
-ALTER TABLE public.users
-    OWNER to postgres;
-
-
-
-CREATE TABLE IF NOT EXISTS public.access_tokens
-(
-    id serial,
-    access_token text,
-    user_id integer,
-    PRIMARY KEY (id)
-)
-WITH (
-    OIDS = FALSE
-);
-
-ALTER TABLE public.access_tokens
-    OWNER to postgres;
