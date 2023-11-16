@@ -7,11 +7,13 @@ import {
   GetTasksAsync,
 } from "../Services/TasksService.js";
 import { GetCompletedTasksAsync } from "../Services/TaskCompletionService.js";
+import { AuthenticateToken } from "../Services/AuthService.js";
 
 const TaskRouter = express.Router();
 
 TaskRouter.get("", async (req, res) => {
   try {
+    AuthenticateToken(req, res);
     const tasks = await GetTasksAsync();
 
     // todo: move to service layer and add to get by id
@@ -32,6 +34,7 @@ TaskRouter.get("", async (req, res) => {
 
 TaskRouter.get("/:id", async (req, res) => {
   try {
+    AuthenticateToken(req, res);
     const task = await GetTaskByIdAsync(req.params.id);
     res.json(task);
   } catch (e) {
@@ -41,6 +44,7 @@ TaskRouter.get("/:id", async (req, res) => {
 
 TaskRouter.post("", async (req, res) => {
   try {
+    AuthenticateToken(req, res);
     const task = await CreateTaskAsync(req.body);
     return res.json(task.rows);
   } catch (e) {
@@ -50,6 +54,7 @@ TaskRouter.post("", async (req, res) => {
 
 TaskRouter.put("/:id", async (req, res) => {
   try {
+    AuthenticateToken(req, res);
     const task = await EditTaskAsync(req.params.id, req.body);
     return res.json(task.rows);
   } catch (e) {
@@ -59,6 +64,7 @@ TaskRouter.put("/:id", async (req, res) => {
 
 TaskRouter.delete("/:id", async (req, res) => {
   try {
+    AuthenticateToken(req, res);
     const tasks = await DeleteTaskAsync(req.params.id);
     return res.json(tasks.rows);
   } catch (e) {
