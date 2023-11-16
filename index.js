@@ -4,10 +4,14 @@ import AuthRouter from "./Controllers/AuthController.js";
 import TaskRouter from "./Controllers/TasksController.js";
 import OrderRouter from "./Controllers/OrderController.js";
 import TaskCompletionRouter from "./Controllers/TaskCompletionController.js";
+import dotenv from "dotenv";
 
 // Leverages heroku server assigned port; may change
 const PORT = process.env.PORT || 5000;
 const corsOptions = { origin: process.env.URL || "*" };
+
+// Setup config vars
+dotenv.config();
 
 // Setup Express
 export const app = express();
