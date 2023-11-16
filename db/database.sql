@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS completed_tasks(
   CONSTRAINT fk_completed_tasks_task_id
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS task_orders(
@@ -29,7 +30,8 @@ CREATE TABLE IF NOT EXISTS task_orders(
   task_order INTEGER NOT NULL,
   CONSTRAINT fk_task_orders_task_id
     FOREIGN KEY(task_id)
-    REFERENCES tasks(id),
+    REFERENCES tasks(id)
+    ON DELETE CASCADE,
   day_of_week INTEGER NOT NULL,
   UNIQUE (task_id, day_of_week)
 );
