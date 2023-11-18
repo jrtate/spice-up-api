@@ -2,12 +2,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {
   InsertUserAsync,
-  ValidateEmailExistsAsync,
+  ReadUserByEmailAsync,
 } from "../Repositories/AuthRepository.js";
 
 export const CreateUserAsync = async (email, password, done) => {
   try {
-    const userExists = await ValidateEmailExistsAsync(email);
+    const userExists = await ReadUserByEmailAsync(email);
 
     if (userExists) {
       return done(null, false);
@@ -22,7 +22,7 @@ export const CreateUserAsync = async (email, password, done) => {
 
 export const AuthenticateUserAsync = async (email, password, done) => {
   try {
-    const user = await ValidateEmailExistsAsync(email);
+    const user = await ReadUserByEmailAsync(email);
     if (!user) return done(null, false);
     const isMatch = await MatchPassword(password, user.password);
     if (!isMatch) return done(null, false);
@@ -33,7 +33,7 @@ export const AuthenticateUserAsync = async (email, password, done) => {
   }
 };
 
-export const AuthenticateToken = (req, res) => {
+export const AuthenticateToken = async (req, res) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -46,6 +46,8 @@ export const AuthenticateToken = (req, res) => {
 
     req.user = user;
   });
+
+  return await ReadUserByEmailAsync(req.user.username);
 };
 
 export const GenerateAccessToken = (username) => {

@@ -7,9 +7,9 @@ import {
 } from "../Repositories/TasksRepository.js";
 import res from "express/lib/response.js";
 
-export const GetTasksAsync = async () => {
+export const GetTasksAsync = async (user) => {
   try {
-    const taskList = await ReadTasksAsync();
+    const taskList = await ReadTasksAsync(user);
     return taskList?.rows?.map?.((task) => {
       return {
         id: task.id,
@@ -26,9 +26,9 @@ export const GetTasksAsync = async () => {
   }
 };
 
-export const GetTaskByIdAsync = async (id) => {
+export const GetTaskByIdAsync = async (id, user) => {
   try {
-    const task = await ReadTaskAsync(id);
+    const task = await ReadTaskAsync(id, user);
     return {
       id: task.id,
       description: task.description,
@@ -43,7 +43,7 @@ export const GetTaskByIdAsync = async (id) => {
   }
 };
 
-export const CreateTaskAsync = async (task) => {
+export const CreateTaskAsync = async (task, user) => {
   try {
     // Validate
     if (task.daysOfWeek.length === 0 && !task.isRandom) {
@@ -61,16 +61,16 @@ export const CreateTaskAsync = async (task) => {
     const updatedTask = RandomizeDays(task);
 
     // Insert
-    return await InsertTaskAsync(updatedTask);
+    return await InsertTaskAsync(updatedTask, user);
   } catch (e) {
     console.log(e.message);
   }
 };
 
-export const EditTaskAsync = async (id, task) => {
+export const EditTaskAsync = async (id, task, user) => {
   try {
     // Validate
-    const existingTask = GetTaskByIdAsync(id);
+    const existingTask = GetTaskByIdAsync(id, user);
     if (!id || !existingTask) {
       return res.status(400).send("Task does not exist.");
     }
@@ -93,11 +93,16 @@ export const EditTaskAsync = async (id, task) => {
   }
 };
 
-export const DeleteTaskAsync = async (id) => {
+export const DeleteTaskAsync = async (id, user) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
     }
+    const existingTask = GetTaskByIdAsync(id, user);
+    if (!existingTask) {
+      return res.status(204);
+    }
+
     return await DeleteTaskPsqlAsync(id);
   } catch (e) {
     console.log(e.message);

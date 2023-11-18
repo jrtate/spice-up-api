@@ -9,8 +9,8 @@ import { AuthenticateToken } from "../Services/AuthService.js";
 const TaskCompletionRouter = express.Router();
 TaskCompletionRouter.get("/complete/:id", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const task = await GetCompletedTasksAsync(req.params.id);
+    const user = await AuthenticateToken(req, res);
+    const task = await GetCompletedTasksAsync(req.params.id, user);
     res.json(task);
   } catch (e) {
     console.log(e.message);
@@ -19,8 +19,8 @@ TaskCompletionRouter.get("/complete/:id", async (req, res) => {
 
 TaskCompletionRouter.post("/complete/:id", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const result = await CompleteTaskAsync(req.body);
+    const user = await AuthenticateToken(req, res);
+    const result = await CompleteTaskAsync(req.body, user);
     return res.json(result.rows);
   } catch (e) {
     console.log(e.message);
@@ -29,8 +29,8 @@ TaskCompletionRouter.post("/complete/:id", async (req, res) => {
 
 TaskCompletionRouter.delete("/uncomplete/:id", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const result = await UnCompleteTaskAsync(req.params.id);
+    const user = await AuthenticateToken(req, res);
+    const result = await UnCompleteTaskAsync(req.params.id, user);
     return res.json(result.rows);
   } catch (e) {
     console.log(e.message);
