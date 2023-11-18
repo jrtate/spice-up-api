@@ -11,7 +11,12 @@ CREATE TABLE IF NOT EXISTS tasks(
   is_recurring BOOLEAN NOT NULL DEFAULT TRUE,
   is_random BOOLEAN NOT NULL DEFAULT FALSE,
   days_of_week INTEGER[] NULL,
-  frequency INTEGER NULL
+  frequency INTEGER NULL,
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_tasks_user_id
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS completed_tasks(
@@ -21,6 +26,11 @@ CREATE TABLE IF NOT EXISTS completed_tasks(
   CONSTRAINT fk_completed_tasks_task_id
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
+    ON DELETE CASCADE,
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_completed_tasks_user_id
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
     ON DELETE CASCADE
 );
 
@@ -33,7 +43,12 @@ CREATE TABLE IF NOT EXISTS task_orders(
     REFERENCES tasks(id)
     ON DELETE CASCADE,
   day_of_week INTEGER NOT NULL,
-  UNIQUE (task_id, day_of_week)
+  UNIQUE (task_id, day_of_week),
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_task_orders_user_id
+      FOREIGN KEY(user_id)
+      REFERENCES users(id)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS users(

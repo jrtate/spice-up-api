@@ -1,16 +1,19 @@
 import pool from "../db/db.js";
 
-export const ReadTasksAsync = async () => {
-  return await pool.query("SELECT * FROM tasks");
+export const ReadTasksAsync = async (user) => {
+  return await pool.query("SELECT * FROM tasks WHERE user_id=$1;", [user.id]);
 };
 
-export const ReadTaskAsync = async (id) => {
-  return await pool.query("SELECT * FROM tasks WHERE id=$1;", [id]);
+export const ReadTaskAsync = async (id, user) => {
+  return await pool.query("SELECT * FROM tasks WHERE id=$1 AND user_id=$2;", [
+    id,
+    [user.id],
+  ]);
 };
 
-export const InsertTaskAsync = async (task) => {
+export const InsertTaskAsync = async (task, user) => {
   return await pool.query(
-    "INSERT INTO tasks (description, duration, is_recurring, is_random, days_of_week, frequency) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;",
+    "INSERT INTO tasks (description, duration, is_recurring, is_random, days_of_week, frequency, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;",
     [
       task.description,
       task.duration,
@@ -18,6 +21,7 @@ export const InsertTaskAsync = async (task) => {
       task.isRandom,
       task.daysOfWeek,
       task.frequency,
+      user.id,
     ],
   );
 };

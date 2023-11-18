@@ -9,8 +9,8 @@ const OrderRouter = express.Router();
 
 OrderRouter.get("", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const results = await GetTaskOrdersAsync();
+    const user = await AuthenticateToken(req, res);
+    const results = await GetTaskOrdersAsync(user);
     res.json(results);
   } catch (e) {
     console.log(e.message);
@@ -19,8 +19,8 @@ OrderRouter.get("", async (req, res) => {
 
 OrderRouter.put("", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    await UpsertTaskOrderAsync(req.body);
+    const user = await AuthenticateToken(req, res);
+    await UpsertTaskOrderAsync(req.body, user);
     return res.status(200).json({});
   } catch (e) {
     console.log(e.message);

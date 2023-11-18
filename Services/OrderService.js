@@ -3,9 +3,9 @@ import {
   UpsertOrderAsync,
 } from "../Repositories/OrderRepository.js";
 
-export const GetTaskOrdersAsync = async () => {
+export const GetTaskOrdersAsync = async (user) => {
   try {
-    const taskOrders = await ReadTaskOrdersAsync();
+    const taskOrders = await ReadTaskOrdersAsync(user);
     return taskOrders?.rows?.map?.((taskOrder) => {
       return {
         id: taskOrder.id,
@@ -19,7 +19,7 @@ export const GetTaskOrdersAsync = async () => {
   }
 };
 
-export const UpsertTaskOrderAsync = async (taskOrders) => {
+export const UpsertTaskOrderAsync = async (taskOrders, user) => {
   try {
     /*if (taskOrders?.some?.((taskOrder) => !!taskOrder.taskId)) {
           return res.sendStatus(400).send("Must provide a taskId.");
@@ -28,7 +28,7 @@ export const UpsertTaskOrderAsync = async (taskOrders) => {
           return res.sendStatus(400).send("Must provide an order.");
         }*/
 
-    return Promise.all(await UpsertOrderAsync(taskOrders));
+    return Promise.all(await UpsertOrderAsync(taskOrders, user));
   } catch (e) {
     console.log(e.message);
   }

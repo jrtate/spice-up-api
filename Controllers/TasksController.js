@@ -13,12 +13,11 @@ const TaskRouter = express.Router();
 
 TaskRouter.get("", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const tasks = await GetTasksAsync();
-
+    const user = await AuthenticateToken(req, res);
+    const tasks = await GetTasksAsync(user);
     // todo: move to service layer and add to get by id
     const mappedTasks = tasks.map(async (task) => {
-      const completedTasks = await GetCompletedTasksAsync(task.id);
+      const completedTasks = await GetCompletedTasksAsync(task.id, user);
       const matchingCompletedTasks = completedTasks?.filter((ct) =>
         task.daysOfWeek.includes(ct.completedDay),
       );
@@ -34,8 +33,8 @@ TaskRouter.get("", async (req, res) => {
 
 TaskRouter.get("/:id", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const task = await GetTaskByIdAsync(req.params.id);
+    const user = await AuthenticateToken(req, res);
+    const task = await GetTaskByIdAsync(req.params.id, user);
     res.json(task);
   } catch (e) {
     console.log(e.message);
@@ -44,8 +43,8 @@ TaskRouter.get("/:id", async (req, res) => {
 
 TaskRouter.post("", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const task = await CreateTaskAsync(req.body);
+    const user = await AuthenticateToken(req, res);
+    const task = await CreateTaskAsync(req.body, user);
     return res.json(task.rows);
   } catch (e) {
     console.log(e.message);
@@ -54,8 +53,8 @@ TaskRouter.post("", async (req, res) => {
 
 TaskRouter.put("/:id", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const task = await EditTaskAsync(req.params.id, req.body);
+    const user = await AuthenticateToken(req, res);
+    const task = await EditTaskAsync(req.params.id, req.body, user);
     return res.json(task.rows);
   } catch (e) {
     console.log(e.message);
@@ -64,8 +63,8 @@ TaskRouter.put("/:id", async (req, res) => {
 
 TaskRouter.delete("/:id", async (req, res) => {
   try {
-    AuthenticateToken(req, res);
-    const tasks = await DeleteTaskAsync(req.params.id);
+    const user = await AuthenticateToken(req, res);
+    const tasks = await DeleteTaskAsync(req.params.id, user);
     return res.json(tasks.rows);
   } catch (e) {
     console.log(e.message);

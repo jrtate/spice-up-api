@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import pool from "../db/db.js";
 
-export const ValidateEmailExistsAsync = async (email) => {
+export const ReadUserByEmailAsync = async (email) => {
   const data = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
 
   if (data.rowCount == 0) return false;
