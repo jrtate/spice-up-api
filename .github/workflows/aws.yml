@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: us-east-2                   
   ECR_REPOSITORY: spice-up           
-  ECS_SERVICE: spice-up-service
+  ECS_SERVICE: spice-up-api-service
   ECS_CLUSTER: DevCluster
   ECS_TASK_DEFINITION: .aws/spice-up-task-definition-revision1-AWS-CLI-input.json
   CONTAINER_NAME: express
