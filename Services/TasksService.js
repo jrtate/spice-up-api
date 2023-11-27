@@ -3,6 +3,7 @@ import {
   InsertTaskAsync,
   ReadTaskAsync,
   ReadTasksAsync,
+  ReadTasksByGoalIdAsync,
   UpdateTaskAsync,
 } from "../Repositories/TasksRepository.js";
 import res from "express/lib/response.js";
@@ -10,6 +11,25 @@ import res from "express/lib/response.js";
 export const GetTasksAsync = async (user) => {
   try {
     const taskList = await ReadTasksAsync(user);
+    return taskList?.rows?.map?.((task) => {
+      return {
+        id: task.id,
+        description: task.description,
+        duration: task.duration,
+        isRecurring: task.is_recurring,
+        isRandom: task.is_random,
+        daysOfWeek: task.days_of_week,
+        frequency: task.frequency,
+      };
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
+  try {
+    const taskList = await ReadTasksByGoalIdAsync(subGoalId, user);
     return taskList?.rows?.map?.((task) => {
       return {
         id: task.id,
@@ -56,6 +76,9 @@ export const CreateTaskAsync = async (task, user) => {
     }
     if (!task.duration) {
       return res.sendStatus(400).send("You must provide a duration.");
+    }
+    if (!task.subGoalId) {
+      return res.sendStatus(400).send("Must include a valid subGoalId.");
     }
 
     const updatedTask = RandomizeDays(task);

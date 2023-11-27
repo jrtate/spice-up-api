@@ -4,6 +4,31 @@ CREATE DATABASE spiceup;
 --\c spiceup
 
 -- Create Tables
+CREATE TABLE IF NOT EXISTS goals(
+  id SERIAL PRIMARY KEY,
+  description VARCHAR(50),
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_tasks_user_id
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS sub_goals(
+  id SERIAL PRIMARY KEY,
+  description VARCHAR(50),
+  goal_id INTEGER NOT NULL,
+  CONSTRAINT fk_sub_goals_goal_id
+    FOREIGN KEY(goal_id)
+    REFERENCES goals(id)
+    ON DELETE CASCADE,
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_tasks_user_id
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS tasks(
   id SERIAL PRIMARY KEY,
   description VARCHAR(50),
@@ -12,6 +37,11 @@ CREATE TABLE IF NOT EXISTS tasks(
   is_random BOOLEAN NOT NULL DEFAULT FALSE,
   days_of_week INTEGER[] NULL,
   frequency INTEGER NULL,
+  sub_goal_id INTEGER NOT NULL,
+  CONSTRAINT fk_tasks_sub_goal_id
+    FOREIGN KEY(sub_goal_id)
+    REFERENCES sub_goals(id)
+    ON DELETE CASCADE,
   user_id INTEGER NOT NULL,
   CONSTRAINT fk_tasks_user_id
     FOREIGN KEY(user_id)

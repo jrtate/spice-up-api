@@ -13,7 +13,7 @@ OrderRouter.get("", async (req, res) => {
     const results = await GetTaskOrdersAsync(user);
     res.json(results);
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 
@@ -23,7 +23,7 @@ OrderRouter.put("", async (req, res) => {
     await UpsertTaskOrderAsync(req.body, user);
     return res.status(200).json({});
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 
