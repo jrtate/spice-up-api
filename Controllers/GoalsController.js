@@ -1,0 +1,53 @@
+import express from "express";
+import { AuthenticateToken } from "../Services/AuthService.js";
+import {
+  CreateGoalAsync,
+  DeleteGoalAsync,
+  EditGoalAsync,
+  GetGoalsAsync,
+} from "../Services/GoalsService.js";
+
+const GoalsRouter = express.Router();
+
+GoalsRouter.get("", async (req, res) => {
+  try {
+    const user = await AuthenticateToken(req, res);
+    const goals = await GetGoalsAsync(user);
+    const results = await Promise.all(goals);
+    res.json(results);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+GoalsRouter.post("", async (req, res) => {
+  try {
+    const user = await AuthenticateToken(req, res);
+    const goal = await CreateGoalAsync(req.body, user);
+    return res.json(goal.rows);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+GoalsRouter.put("/:id", async (req, res) => {
+  try {
+    const user = await AuthenticateToken(req, res);
+    const goal = await EditGoalAsync(req.params.id, req.body, user);
+    return res.json(goal.rows);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+GoalsRouter.delete("/:id", async (req, res) => {
+  try {
+    const user = await AuthenticateToken(req, res);
+    const goals = await DeleteGoalAsync(req.params.id, user);
+    return res.json(goals.rows);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+export default GoalsRouter;

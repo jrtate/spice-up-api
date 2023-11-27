@@ -27,7 +27,7 @@ TaskRouter.get("", async (req, res) => {
     const results = await Promise.all(mappedTasks);
     res.json(results);
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 
@@ -37,17 +37,17 @@ TaskRouter.get("/:id", async (req, res) => {
     const task = await GetTaskByIdAsync(req.params.id, user);
     res.json(task);
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 
-TaskRouter.post("", async (req, res) => {
+TaskRouter.post("", async (req, res, next) => {
   try {
     const user = await AuthenticateToken(req, res);
     const task = await CreateTaskAsync(req.body, user);
     return res.json(task.rows);
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 
@@ -57,7 +57,7 @@ TaskRouter.put("/:id", async (req, res) => {
     const task = await EditTaskAsync(req.params.id, req.body, user);
     return res.json(task.rows);
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 
@@ -67,7 +67,7 @@ TaskRouter.delete("/:id", async (req, res) => {
     const tasks = await DeleteTaskAsync(req.params.id, user);
     return res.json(tasks.rows);
   } catch (e) {
-    console.log(e.message);
+    res.status(500).send(e.message);
   }
 });
 

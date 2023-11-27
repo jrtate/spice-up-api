@@ -40,7 +40,7 @@ export const AuthenticateToken = async (req, res) => {
   if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log(err);
+    if (err !== null) console.log(err);
 
     if (err) return res.sendStatus(403);
 
@@ -57,6 +57,5 @@ export const GenerateAccessToken = (username) => {
 };
 
 export const MatchPassword = async (password, hashPassword) => {
-  const match = await bcrypt.compare(password, hashPassword);
-  return match;
+  return await bcrypt.compare(password, hashPassword);
 };

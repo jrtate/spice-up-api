@@ -5,6 +5,8 @@ import TaskRouter from "./Controllers/TasksController.js";
 import OrderRouter from "./Controllers/OrderController.js";
 import TaskCompletionRouter from "./Controllers/TaskCompletionController.js";
 import dotenv from "dotenv";
+import GoalsRouter from "./Controllers/GoalsController.js";
+import SubGoalsRouter from "./Controllers/SubGoalsController.js";
 
 // Leverages heroku server assigned port; may change
 const PORT = process.env.PORT || 5000;
@@ -21,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/auth", AuthRouter);
+app.use("/goals", GoalsRouter);
+app.use("/sub-goals", SubGoalsRouter);
 app.use("/tasks", TaskRouter);
 app.use("/task-completion", TaskCompletionRouter);
 app.use("/order", OrderRouter);
