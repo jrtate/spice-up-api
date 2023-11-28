@@ -28,7 +28,7 @@ export const InsertTaskAsync = async (task, user) => {
       task.isRandom,
       task.daysOfWeek,
       task.frequency,
-      task.subGoalId,
+      task?.subGoalId || null,
       user.id,
     ],
   );
