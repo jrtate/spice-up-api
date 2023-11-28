@@ -49,6 +49,34 @@ CREATE TABLE IF NOT EXISTS tasks(
     ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS completed_goals(
+  id SERIAL PRIMARY KEY,
+  goal_id INTEGER NOT NULL,
+  CONSTRAINT fk_completed_goals_goal_id
+    FOREIGN KEY(goal_id)
+    REFERENCES goals(id)
+    ON DELETE CASCADE,
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_completed_sub_goals_user_id
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS completed_sub_goals(
+  id SERIAL PRIMARY KEY,
+  sub_goal_id INTEGER NOT NULL,
+  CONSTRAINT fk_completed_sub_goals_goal_id
+    FOREIGN KEY(sub_goal_id)
+    REFERENCES sub_goals(id)
+    ON DELETE CASCADE,
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_completed_sub_goals_user_id
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS completed_tasks(
   id SERIAL PRIMARY KEY,
   task_id INTEGER NOT NULL,
