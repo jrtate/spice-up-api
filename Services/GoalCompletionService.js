@@ -5,7 +5,7 @@ import {
   ReadCompletedGoalAsync,
 } from "../Repositories/GoalCompletionRepository.js";
 
-export const GetCompletedGoalsAsync = async (id, user) => {
+export const GetCompletedGoalAsync = async (id, user) => {
   try {
     const completedGoalsList = await ReadCompletedGoalAsync(id, user);
     return completedGoalsList.rows.map((completedGoal) => {

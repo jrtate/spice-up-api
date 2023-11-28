@@ -6,6 +6,7 @@ import {
   EditGoalAsync,
   GetGoalsAsync,
 } from "../Services/GoalsService.js";
+import { GetCompletedGoalAsync } from "../Services/GoalCompletionService.js";
 
 const GoalsRouter = express.Router();
 
@@ -13,7 +14,12 @@ GoalsRouter.get("", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
     const goals = await GetGoalsAsync(user);
-    const results = await Promise.all(goals);
+    const mappedGoals = goals.map(async (goal) => {
+      const completedGoal = await GetCompletedGoalAsync(goal.id, user);
+      goal.isCompleted = completedGoal.length > 0;
+      return goal;
+    });
+    const results = await Promise.all(mappedGoals);
     res.json(results);
   } catch (e) {
     console.log(e.message);

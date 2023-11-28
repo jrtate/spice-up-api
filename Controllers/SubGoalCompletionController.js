@@ -20,7 +20,7 @@ SubGoalCompletionRouter.get("/complete/:id", async (req, res) => {
 SubGoalCompletionRouter.post("/complete/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const result = await CompleteSubGoalAsync(req.body, user);
+    const result = await CompleteSubGoalAsync(req.params.id, user);
     return res.json(result.rows);
   } catch (e) {
     console.log(e.message);

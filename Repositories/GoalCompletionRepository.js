@@ -7,10 +7,10 @@ export const ReadCompletedGoalAsync = async (id, user) => {
   );
 };
 
-export const CreateCompletedGoalAsync = async (completedGoal, user) => {
+export const CreateCompletedGoalAsync = async (id, user) => {
   return await pool.query(
     "INSERT INTO completed_goals (goal_id, user_id) VALUES ($1, $2) RETURNING *;",
-    [completedGoal.id, user.id],
+    [id, user.id],
   );
 };
 
