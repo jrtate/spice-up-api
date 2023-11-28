@@ -77,9 +77,6 @@ export const CreateTaskAsync = async (task, user) => {
     if (!task.duration) {
       return res.sendStatus(400).send("You must provide a duration.");
     }
-    if (!task.subGoalId) {
-      return res.sendStatus(400).send("Must include a valid subGoalId.");
-    }
 
     const updatedTask = RandomizeDays(task);
 

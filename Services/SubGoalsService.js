@@ -35,6 +35,9 @@ export const CreateSubGoalAsync = async (subGoal, user) => {
     if (!subGoal.description) {
       return res.sendStatus(400).send("You must provide a description.");
     }
+    if (!subGoal.goalId) {
+      return res.sendStatus(400).send("You must provide a valid goalId.");
+    }
 
     return await InsertSubGoalAsync(subGoal, user);
   } catch (e) {
