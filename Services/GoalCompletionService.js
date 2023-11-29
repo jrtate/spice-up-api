@@ -8,7 +8,7 @@ import {
 export const GetCompletedGoalAsync = async (id, user) => {
   try {
     const completedGoalList = await ReadCompletedGoalAsync(id, user);
-    return completedGoalList.rows.length > 0;
+    return completedGoalList?.rows?.length > 0;
   } catch (e) {
     console.log(e.message);
   }
@@ -21,7 +21,7 @@ export const CompleteGoalAsync = async (id, user) => {
     }
 
     const isCompleted = await ReadCompletedGoalAsync(id, user);
-    if (isCompleted.rows.length) {
+    if (isCompleted?.rows?.length) {
       return res.sendStatus(204);
     }
 
@@ -37,7 +37,7 @@ export const UnCompleteGoalAsync = async (id, user) => {
       return res.sendStatus(400).send("Must provide an ID.");
     }
     const isCompleted = await ReadCompletedGoalAsync(id, user);
-    if (!isCompleted.rows.length) {
+    if (!isCompleted?.rows?.length) {
       return res.sendStatus(204);
     }
 

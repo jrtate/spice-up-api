@@ -21,7 +21,7 @@ GoalCompletionRouter.post("/complete/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
     const result = await CompleteGoalAsync(req.params.id, user);
-    return res.json(result.rows);
+    return res.json(result?.rows);
   } catch (e) {
     console.log(e.message);
   }
@@ -31,7 +31,7 @@ GoalCompletionRouter.delete("/uncomplete/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
     const result = await UnCompleteGoalAsync(req.params.id, user);
-    return res.json(result.rows);
+    return res.json(result?.rows);
   } catch (e) {
     console.log(e.message);
   }

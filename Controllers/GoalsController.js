@@ -6,7 +6,6 @@ import {
   EditGoalAsync,
   GetGoalsAsync,
 } from "../Services/GoalsService.js";
-import { GetCompletedGoalAsync } from "../Services/GoalCompletionService.js";
 
 const GoalsRouter = express.Router();
 
