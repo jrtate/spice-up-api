@@ -7,6 +7,7 @@ import {
   UpdateGoalAsync,
 } from "../Repositories/GoalsRepository.js";
 import { GetSubGoalsByGoalIdAsync } from "./SubGoalsService.js";
+import { GetCompletedGoalAsync } from "./GoalCompletionService.js";
 
 export const GetGoalsAsync = async (user) => {
   try {
@@ -15,6 +16,7 @@ export const GetGoalsAsync = async (user) => {
       return {
         id: goal.id,
         description: goal.description,
+        isCompleted: await GetCompletedGoalAsync(goal.id, user),
         subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user),
       };
     });

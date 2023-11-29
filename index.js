@@ -7,6 +7,8 @@ import TaskCompletionRouter from "./Controllers/TaskCompletionController.js";
 import dotenv from "dotenv";
 import GoalsRouter from "./Controllers/GoalsController.js";
 import SubGoalsRouter from "./Controllers/SubGoalsController.js";
+import GoalCompletionRouter from "./Controllers/GoalCompletionController.js";
+import SubGoalCompletionRouter from "./Controllers/SubGoalCompletionController.js";
 
 // Leverages heroku server assigned port; may change
 const PORT = process.env.PORT || 5000;
@@ -26,6 +28,8 @@ app.use("/auth", AuthRouter);
 app.use("/goals", GoalsRouter);
 app.use("/sub-goals", SubGoalsRouter);
 app.use("/tasks", TaskRouter);
+app.use("/goal-completion", GoalCompletionRouter);
+app.use("/sub-goal-completion", SubGoalCompletionRouter);
 app.use("/task-completion", TaskCompletionRouter);
 app.use("/order", OrderRouter);
 

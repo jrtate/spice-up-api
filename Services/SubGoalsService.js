@@ -7,6 +7,7 @@ import {
   UpdateSubGoalAsync,
 } from "../Repositories/SubGoalsRepository.js";
 import { GetTasksByGoalIdAsync } from "./TasksService.js";
+import { GetCompletedSubGoalsAsync } from "./SubGoalCompletionService.js";
 
 export const GetSubGoalsByGoalIdAsync = async (goalId, user) => {
   try {
@@ -20,6 +21,7 @@ export const GetSubGoalsByGoalIdAsync = async (goalId, user) => {
       return {
         id: subGoal.id,
         description: subGoal.description,
+        isCompleted: await GetCompletedSubGoalsAsync(subGoal.id, user),
         tasks: await Promise.all(await GetTasksByGoalIdAsync(subGoal.id, user)),
       };
     });
