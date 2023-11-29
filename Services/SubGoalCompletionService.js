@@ -8,11 +8,7 @@ import {
 export const GetCompletedSubGoalsAsync = async (id, user) => {
   try {
     const completedSubGoalsList = await ReadCompletedSubGoalAsync(id, user);
-    return completedSubGoalsList.rows.map((completedSubGoal) => {
-      return {
-        id: completedSubGoal.id,
-      };
-    });
+    return completedSubGoalsList.rows.length > 0;
   } catch (e) {
     console.log(e.message);
   }
@@ -24,8 +20,8 @@ export const CompleteSubGoalAsync = async (id, user) => {
       return res.sendStatus(400).send("Must provide an ID.");
     }
 
-    const isCompleted = ReadCompletedSubGoalAsync(id, user);
-    if (!isCompleted) {
+    const isCompleted = await ReadCompletedSubGoalAsync(id, user);
+    if (isCompleted.rows.length) {
       return res.sendStatus(204);
     }
 
@@ -40,8 +36,8 @@ export const UnCompleteSubGoalAsync = async (id, user) => {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
     }
-    const isCompleted = ReadCompletedSubGoalAsync(id, user);
-    if (!isCompleted) {
+    const isCompleted = await ReadCompletedSubGoalAsync(id, user);
+    if (!isCompleted.rows.length) {
       return res.sendStatus(204);
     }
 

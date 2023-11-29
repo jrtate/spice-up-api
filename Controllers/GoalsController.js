@@ -14,12 +14,7 @@ GoalsRouter.get("", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
     const goals = await GetGoalsAsync(user);
-    const mappedGoals = goals.map(async (goal) => {
-      const completedGoal = await GetCompletedGoalAsync(goal.id, user);
-      goal.isCompleted = completedGoal.length > 0;
-      return goal;
-    });
-    const results = await Promise.all(mappedGoals);
+    const results = await Promise.all(goals);
     res.json(results);
   } catch (e) {
     console.log(e.message);
