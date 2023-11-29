@@ -9,6 +9,7 @@ import GoalsRouter from "./Controllers/GoalsController.js";
 import SubGoalsRouter from "./Controllers/SubGoalsController.js";
 import GoalCompletionRouter from "./Controllers/GoalCompletionController.js";
 import SubGoalCompletionRouter from "./Controllers/SubGoalCompletionController.js";
+import TaskBlockRouter from "./Controllers/TaskBlockController.js";
 
 // Leverages heroku server assigned port; may change
 const PORT = process.env.PORT || 5000;
@@ -32,6 +33,7 @@ app.use("/goal-completion", GoalCompletionRouter);
 app.use("/sub-goal-completion", SubGoalCompletionRouter);
 app.use("/task-completion", TaskCompletionRouter);
 app.use("/order", OrderRouter);
+app.use("/task-block", TaskBlockRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);
