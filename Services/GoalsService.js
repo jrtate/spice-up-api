@@ -1,4 +1,3 @@
-import res from "express/lib/response.js";
 import {
   DeleteGoalPsqlAsync,
   InsertGoalAsync,
@@ -9,7 +8,7 @@ import {
 import { GetSubGoalsByGoalIdAsync } from "./SubGoalsService.js";
 import { GetCompletedGoalAsync } from "./GoalCompletionService.js";
 
-export const GetGoalsAsync = async (user) => {
+export const GetGoalsAsync = async (user, res) => {
   try {
     const goalList = await ReadGoalsAsync(user);
     return await goalList?.rows?.map?.(async (goal) => {
@@ -17,7 +16,7 @@ export const GetGoalsAsync = async (user) => {
         id: goal.id,
         description: goal.description,
         isCompleted: await GetCompletedGoalAsync(goal.id, user),
-        subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user),
+        subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user, res),
       };
     });
   } catch (e) {
@@ -25,13 +24,13 @@ export const GetGoalsAsync = async (user) => {
   }
 };
 
-export const GetGoalByIdAsync = async (id, user) => {
+export const GetGoalByIdAsync = async (id, user, res) => {
   try {
     const goal = await ReadGoalByIdAsync(id, user);
     return {
       id: goal.id,
       description: goal.description,
-      subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user),
+      subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user, res),
     };
   } catch (e) {
     console.log(e.message);
@@ -54,7 +53,7 @@ export const CreateGoalAsync = async (goal, user, res) => {
 export const EditGoalAsync = async (id, goal, user, res) => {
   try {
     // Validate
-    const existingGoal = GetGoalByIdAsync(id, user);
+    const existingGoal = GetGoalByIdAsync(id, user, res);
     if (!id || !existingGoal) {
       return res.status(400).send("Goal does not exist.");
     }
@@ -74,7 +73,7 @@ export const DeleteGoalAsync = async (id, user, res) => {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
     }
-    const existingGoal = GetGoalByIdAsync(id, user);
+    const existingGoal = GetGoalByIdAsync(id, user, res);
     if (!existingGoal) {
       return res.status(204);
     }

@@ -1,11 +1,10 @@
-import res from "express/lib/response.js";
 import {
   CreateCompletedGoalAsync,
   DeleteCompletedGoalAsync,
   ReadCompletedGoalAsync,
 } from "../Repositories/GoalCompletionRepository.js";
 
-export const GetCompletedGoalAsync = async (id, user, res) => {
+export const GetCompletedGoalAsync = async (id, user) => {
   try {
     const completedGoalList = await ReadCompletedGoalAsync(id, user);
     return completedGoalList?.rows?.length > 0;

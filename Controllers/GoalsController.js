@@ -12,7 +12,7 @@ const GoalsRouter = express.Router();
 GoalsRouter.get("", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const goals = await GetGoalsAsync(user);
+    const goals = await GetGoalsAsync(user, res);
     const results = await Promise.all(goals);
     return res.json(results);
   } catch (e) {
@@ -43,7 +43,7 @@ GoalsRouter.put("/:id", async (req, res) => {
 GoalsRouter.delete("/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const goals = await DeleteGoalAsync(req.params.id, user);
+    const goals = await DeleteGoalAsync(req.params.id, user, res);
     return res.json(goals.rows);
   } catch (e) {
     console.log(e.message);
