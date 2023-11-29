@@ -14,7 +14,7 @@ GoalsRouter.get("", async (req, res) => {
     const user = await AuthenticateToken(req, res);
     const goals = await GetGoalsAsync(user);
     const results = await Promise.all(goals);
-    res.json(results);
+    return res.json(results);
   } catch (e) {
     console.log(e.message);
   }
@@ -23,7 +23,7 @@ GoalsRouter.get("", async (req, res) => {
 GoalsRouter.post("", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const goal = await CreateGoalAsync(req.body, user);
+    const goal = await CreateGoalAsync(req.body, user, res);
     return res.json(goal.rows);
   } catch (e) {
     console.log(e.message);
@@ -33,7 +33,7 @@ GoalsRouter.post("", async (req, res) => {
 GoalsRouter.put("/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const goal = await EditGoalAsync(req.params.id, req.body, user);
+    const goal = await EditGoalAsync(req.params.id, req.body, user, res);
     return res.json(goal.rows);
   } catch (e) {
     console.log(e.message);

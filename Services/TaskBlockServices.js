@@ -13,7 +13,6 @@ export const GetTaskBlocksAsync = async (user) => {
         taskId: taskBlock.task_id,
         totalBlocks: taskBlock.total_blocks,
         completedBlocks: taskBlock.completed_blocks,
-        lastKnownDuration: taskBlock.last_known_duration,
         dayOfWeek: taskBlock.day_of_week,
       };
     });
@@ -31,7 +30,6 @@ export const GetTaskBlockByTaskIdAsync = async (taskId, user) => {
         taskId: taskBlock.task_id,
         totalBlocks: taskBlock.total_blocks,
         completedBlocks: taskBlock.completed_blocks,
-        lastKnownDuration: taskBlock.last_known_duration,
         dayOfWeek: taskBlock.day_of_week,
       };
     });

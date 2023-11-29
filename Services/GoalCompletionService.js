@@ -5,7 +5,7 @@ import {
   ReadCompletedGoalAsync,
 } from "../Repositories/GoalCompletionRepository.js";
 
-export const GetCompletedGoalAsync = async (id, user) => {
+export const GetCompletedGoalAsync = async (id, user, res) => {
   try {
     const completedGoalList = await ReadCompletedGoalAsync(id, user);
     return completedGoalList?.rows?.length > 0;
@@ -14,7 +14,7 @@ export const GetCompletedGoalAsync = async (id, user) => {
   }
 };
 
-export const CompleteGoalAsync = async (id, user) => {
+export const CompleteGoalAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
@@ -31,7 +31,7 @@ export const CompleteGoalAsync = async (id, user) => {
   }
 };
 
-export const UnCompleteGoalAsync = async (id, user) => {
+export const UnCompleteGoalAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
@@ -41,7 +41,7 @@ export const UnCompleteGoalAsync = async (id, user) => {
       return res.sendStatus(204);
     }
 
-    return await DeleteCompletedGoalAsync(id, user);
+    return await DeleteCompletedGoalAsync(id, user, res);
   } catch (e) {
     console.log(e.message);
   }

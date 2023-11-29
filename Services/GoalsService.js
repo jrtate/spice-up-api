@@ -38,7 +38,7 @@ export const GetGoalByIdAsync = async (id, user) => {
   }
 };
 
-export const CreateGoalAsync = async (goal, user) => {
+export const CreateGoalAsync = async (goal, user, res) => {
   try {
     // Validate
     if (!goal.description) {
@@ -51,7 +51,7 @@ export const CreateGoalAsync = async (goal, user) => {
   }
 };
 
-export const EditGoalAsync = async (id, goal, user) => {
+export const EditGoalAsync = async (id, goal, user, res) => {
   try {
     // Validate
     const existingGoal = GetGoalByIdAsync(id, user);
@@ -69,7 +69,7 @@ export const EditGoalAsync = async (id, goal, user) => {
   }
 };
 
-export const DeleteGoalAsync = async (id, user) => {
+export const DeleteGoalAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");

@@ -115,7 +115,6 @@ CREATE TABLE IF NOT EXISTS task_blocks(
   task_id INTEGER NOT NULL,
   total_blocks INTEGER NOT NULL,
   completed_blocks INTEGER NOT NULL,
-  last_known_duration INTEGER NULL,
   CONSTRAINT fk_task_blocks_task_id
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
