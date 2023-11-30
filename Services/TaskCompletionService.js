@@ -3,7 +3,6 @@ import {
   DeleteCompletedTaskAsync,
   ReadCompletedTaskAsync,
 } from "../Repositories/TaskCompletionRepository.js";
-import res from "express/lib/response.js";
 
 export const GetCompletedTasksAsync = async (id, user) => {
   try {
@@ -19,7 +18,7 @@ export const GetCompletedTasksAsync = async (id, user) => {
   }
 };
 
-export const CompleteTaskAsync = async (completedTask, user) => {
+export const CompleteTaskAsync = async (completedTask, user, res) => {
   try {
     if (!completedTask.id) {
       return res.sendStatus(400).send("Must provide an ID.");
@@ -38,7 +37,7 @@ export const CompleteTaskAsync = async (completedTask, user) => {
   }
 };
 
-export const UnCompleteTaskAsync = async (id, user) => {
+export const UnCompleteTaskAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");

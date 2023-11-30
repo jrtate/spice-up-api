@@ -20,7 +20,7 @@ GoalCompletionRouter.get("/complete/:id", async (req, res) => {
 GoalCompletionRouter.post("/complete/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const result = await CompleteGoalAsync(req.params.id, user);
+    const result = await CompleteGoalAsync(req.params.id, user, res);
     return res.json(result?.rows);
   } catch (e) {
     console.log(e.message);
@@ -30,8 +30,8 @@ GoalCompletionRouter.post("/complete/:id", async (req, res) => {
 GoalCompletionRouter.delete("/uncomplete/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const result = await UnCompleteGoalAsync(req.params.id, user);
-    return res.json(result?.rows);
+    const result = await UnCompleteGoalAsync(req.params.id, user, res);
+    res.json(result?.rows);
   } catch (e) {
     console.log(e.message);
   }

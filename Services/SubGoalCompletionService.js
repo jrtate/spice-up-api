@@ -1,4 +1,3 @@
-import res from "express/lib/response.js";
 import {
   CreateCompletedSubGoalAsync,
   DeleteCompletedSubGoalAsync,
@@ -14,7 +13,7 @@ export const GetCompletedSubGoalsAsync = async (id, user) => {
   }
 };
 
-export const CompleteSubGoalAsync = async (id, user) => {
+export const CompleteSubGoalAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
@@ -31,7 +30,7 @@ export const CompleteSubGoalAsync = async (id, user) => {
   }
 };
 
-export const UnCompleteSubGoalAsync = async (id, user) => {
+export const UnCompleteSubGoalAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");

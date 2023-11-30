@@ -44,7 +44,7 @@ TaskRouter.get("/:id", async (req, res) => {
 TaskRouter.post("", async (req, res, next) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const task = await CreateTaskAsync(req.body, user);
+    const task = await CreateTaskAsync(req.body, user, res);
     return res.json(task.rows);
   } catch (e) {
     console.log(e.message);
@@ -54,7 +54,7 @@ TaskRouter.post("", async (req, res, next) => {
 TaskRouter.put("/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const task = await EditTaskAsync(req.params.id, req.body, user);
+    const task = await EditTaskAsync(req.params.id, req.body, user, res);
     return res.json(task.rows);
   } catch (e) {
     console.log(e.message);
@@ -64,7 +64,7 @@ TaskRouter.put("/:id", async (req, res) => {
 TaskRouter.delete("/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
-    const tasks = await DeleteTaskAsync(req.params.id, user);
+    const tasks = await DeleteTaskAsync(req.params.id, user, res);
     return res.json(tasks.rows);
   } catch (e) {
     console.log(e.message);

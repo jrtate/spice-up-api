@@ -100,10 +100,42 @@ CREATE TABLE IF NOT EXISTS task_orders(
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
     ON DELETE CASCADE,
+  -- todo: replace with timestamp
   day_of_week INTEGER NOT NULL,
   UNIQUE (task_id, day_of_week),
   user_id INTEGER NOT NULL,
   CONSTRAINT fk_task_orders_user_id
+      FOREIGN KEY(user_id)
+      REFERENCES users(id)
+      ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS task_blocks(
+  id SERIAL PRIMARY KEY,
+  task_id INTEGER NOT NULL,
+  total_blocks INTEGER NOT NULL,
+  completed_blocks INTEGER NOT NULL,
+  CONSTRAINT fk_task_blocks_task_id
+    FOREIGN KEY(task_id)
+    REFERENCES tasks(id)
+    ON DELETE CASCADE,
+  -- todo: replace with timestamp
+  day_of_week INTEGER NOT NULL,
+  UNIQUE (task_id, day_of_week),
+  user_id INTEGER NOT NULL,
+  CONSTRAINT fk_task_blocks_user_id
+      FOREIGN KEY(user_id)
+      REFERENCES users(id)
+      ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS settings(
+  id SERIAL PRIMARY KEY,
+  work_block_duration INTEGER NOT NULL DEFAULT 25,
+  break_block_duration INTEGER NOT NULL DEFAULT 5,
+  user_id INTEGER NOT NULL,
+  UNIQUE (user_id),
+  CONSTRAINT fk_settings_user_id
       FOREIGN KEY(user_id)
       REFERENCES users(id)
       ON DELETE CASCADE

@@ -6,7 +6,6 @@ import {
   ReadTasksByGoalIdAsync,
   UpdateTaskAsync,
 } from "../Repositories/TasksRepository.js";
-import res from "express/lib/response.js";
 
 export const GetTasksAsync = async (user) => {
   try {
@@ -63,7 +62,7 @@ export const GetTaskByIdAsync = async (id, user) => {
   }
 };
 
-export const CreateTaskAsync = async (task, user) => {
+export const CreateTaskAsync = async (task, user, res) => {
   try {
     // Validate
     if (task.daysOfWeek.length === 0 && !task.isRandom) {
@@ -78,7 +77,7 @@ export const CreateTaskAsync = async (task, user) => {
       return res.sendStatus(400).send("You must provide a duration.");
     }
 
-    const updatedTask = RandomizeDays(task);
+    const updatedTask = RandomizeDays(task, res);
 
     // Insert
     return await InsertTaskAsync(updatedTask, user);
@@ -87,7 +86,7 @@ export const CreateTaskAsync = async (task, user) => {
   }
 };
 
-export const EditTaskAsync = async (id, task, user) => {
+export const EditTaskAsync = async (id, task, user, res) => {
   try {
     // Validate
     const existingTask = GetTaskByIdAsync(id, user);
@@ -104,7 +103,7 @@ export const EditTaskAsync = async (id, task, user) => {
       return res.sendStatus(400).send("You must provide a duration.");
     }
 
-    const updatedTask = RandomizeDays(task);
+    const updatedTask = RandomizeDays(task, res);
 
     // Update
     return await UpdateTaskAsync(id, updatedTask);
@@ -113,7 +112,7 @@ export const EditTaskAsync = async (id, task, user) => {
   }
 };
 
-export const DeleteTaskAsync = async (id, user) => {
+export const DeleteTaskAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
@@ -129,7 +128,7 @@ export const DeleteTaskAsync = async (id, user) => {
   }
 };
 
-const RandomizeDays = (task) => {
+const RandomizeDays = (task, res) => {
   let updatedTask = task;
   // Assign random dates based on frequency, if user opted in
   if (task.daysOfWeek.length === 0 && task.isRandom) {

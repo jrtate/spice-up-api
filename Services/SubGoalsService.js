@@ -1,4 +1,3 @@
-import res from "express/lib/response.js";
 import {
   DeleteSubGoalPsqlAsync,
   InsertSubGoalAsync,
@@ -9,7 +8,7 @@ import {
 import { GetTasksByGoalIdAsync } from "./TasksService.js";
 import { GetCompletedSubGoalsAsync } from "./SubGoalCompletionService.js";
 
-export const GetSubGoalsByGoalIdAsync = async (goalId, user) => {
+export const GetSubGoalsByGoalIdAsync = async (goalId, user, res) => {
   try {
     // Validate
     if (!goalId) {
@@ -31,7 +30,7 @@ export const GetSubGoalsByGoalIdAsync = async (goalId, user) => {
   }
 };
 
-export const CreateSubGoalAsync = async (subGoal, user) => {
+export const CreateSubGoalAsync = async (subGoal, user, res) => {
   try {
     // Validate
     if (!subGoal.description) {
@@ -47,7 +46,7 @@ export const CreateSubGoalAsync = async (subGoal, user) => {
   }
 };
 
-export const EditSubGoalAsync = async (id, subGoal, user) => {
+export const EditSubGoalAsync = async (id, subGoal, user, res) => {
   try {
     // Validate
     const existingSubGoal = ReadSubGoalByIdAsync(id, user);
@@ -65,7 +64,7 @@ export const EditSubGoalAsync = async (id, subGoal, user) => {
   }
 };
 
-export const DeleteSubGoalAsync = async (id, user) => {
+export const DeleteSubGoalAsync = async (id, user, res) => {
   try {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
