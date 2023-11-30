@@ -129,6 +129,18 @@ CREATE TABLE IF NOT EXISTS task_blocks(
       ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS settings(
+  id SERIAL PRIMARY KEY,
+  work_block_duration INTEGER NOT NULL DEFAULT 25,
+  break_block_duration INTEGER NOT NULL DEFAULT 5,
+  user_id INTEGER NOT NULL,
+  UNIQUE (id, user_id),
+  CONSTRAINT fk_settings_user_id
+      FOREIGN KEY(user_id)
+      REFERENCES users(id)
+      ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS users(
   id SERIAL PRIMARY KEY,
   email VARCHAR(128) UNIQUE,
