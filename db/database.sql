@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS settings(
   work_block_duration INTEGER NOT NULL DEFAULT 25,
   break_block_duration INTEGER NOT NULL DEFAULT 5,
   user_id INTEGER NOT NULL,
-  UNIQUE (id, user_id),
+  UNIQUE (user_id),
   CONSTRAINT fk_settings_user_id
       FOREIGN KEY(user_id)
       REFERENCES users(id)
