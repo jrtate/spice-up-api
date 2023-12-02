@@ -27,9 +27,24 @@ export const AuthenticateUserAsync = async (email, password, done) => {
     const isMatch = await MatchPassword(password, user.password);
     if (!isMatch) return done(null, false);
     const token = GenerateAccessToken(email);
-    return done(null, { id: user.id, email: user.email, token: token });
+    const refreshToken = GenerateRefreshToken(email);
+    return done(null, {
+      id: user.id,
+      email: user.email,
+      token: token,
+      refreshToken: refreshToken,
+    });
   } catch (error) {
     return done(error, false);
+  }
+};
+
+export const VerifyRefresh = (email, token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.REFRESH_SECRET);
+    return decoded.email === email;
+  } catch (error) {
+    return false;
   }
 };
 
@@ -47,12 +62,18 @@ export const AuthenticateToken = async (req, res) => {
     req.user = user;
   });
 
-  return await ReadUserByEmailAsync(req.user.username);
+  return await ReadUserByEmailAsync(req.user.email);
 };
 
-export const GenerateAccessToken = (username) => {
-  return jwt.sign({ username }, process.env.TOKEN_SECRET, {
+export const GenerateAccessToken = (email) => {
+  return jwt.sign({ email }, process.env.TOKEN_SECRET, {
     expiresIn: "1h",
+  });
+};
+
+export const GenerateRefreshToken = (email) => {
+  return jwt.sign({ email }, process.env.REFRESH_SECRET, {
+    expiresIn: "24h",
   });
 };
 
