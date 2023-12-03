@@ -100,7 +100,6 @@ CREATE TABLE IF NOT EXISTS task_orders(
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
     ON DELETE CASCADE,
-  -- todo: replace with timestamp
   day_of_week INTEGER NOT NULL,
   UNIQUE (task_id, day_of_week),
   user_id INTEGER NOT NULL,
@@ -119,7 +118,6 @@ CREATE TABLE IF NOT EXISTS task_blocks(
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
     ON DELETE CASCADE,
-  -- todo: replace with timestamp
   day_of_week INTEGER NOT NULL,
   UNIQUE (task_id, day_of_week),
   user_id INTEGER NOT NULL,
