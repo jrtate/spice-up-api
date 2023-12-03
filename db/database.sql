@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS tasks(
   is_random BOOLEAN NOT NULL DEFAULT FALSE,
   days_of_week INTEGER[] NULL,
   frequency INTEGER NULL,
+  scheduled_day DATE NULL,
   sub_goal_id INTEGER NULL,
   CONSTRAINT fk_tasks_sub_goal_id
     FOREIGN KEY(sub_goal_id)

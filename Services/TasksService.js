@@ -19,6 +19,7 @@ export const GetTasksAsync = async (user) => {
         isRandom: task.is_random,
         daysOfWeek: task.days_of_week,
         frequency: task.frequency,
+        scheduledDay: task.scheduled_day,
       };
     });
   } catch (e) {
@@ -38,6 +39,7 @@ export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
         isRandom: task.is_random,
         daysOfWeek: task.days_of_week,
         frequency: task.frequency,
+        scheduledDay: task.scheduled_day,
       };
     });
   } catch (e) {
@@ -56,6 +58,7 @@ export const GetTaskByIdAsync = async (id, user) => {
       isRandom: task.is_random,
       daysOfWeek: task.days_of_week,
       frequency: task.frequency,
+      scheduledDay: task.scheduled_day,
     };
   } catch (e) {
     console.log(e.message);
@@ -65,7 +68,7 @@ export const GetTaskByIdAsync = async (id, user) => {
 export const CreateTaskAsync = async (task, user, res) => {
   try {
     // Validate
-    if (task.daysOfWeek.length === 0 && !task.isRandom) {
+    if (task.daysOfWeek.length === 0 && !task.isRandom && !task.scheduledDay) {
       return res
         .sendStatus(400)
         .send("Must select at least one day to schedule.");
@@ -93,7 +96,7 @@ export const EditTaskAsync = async (id, task, user, res) => {
     if (!id || !existingTask) {
       return res.status(400).send("Task does not exist.");
     }
-    if (task.daysOfWeek.length === 0 && !task.isRandom) {
+    if (task.daysOfWeek.length === 0 && !task.isRandom && !task.scheduledDay) {
       return res.status(400).send("Must select at least one day to schedule.");
     }
     if (!task.description) {
