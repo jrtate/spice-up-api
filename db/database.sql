@@ -119,7 +119,8 @@ CREATE TABLE IF NOT EXISTS task_blocks(
     REFERENCES tasks(id)
     ON DELETE CASCADE,
   day_of_week INTEGER NOT NULL,
-  UNIQUE (task_id, day_of_week),
+  year_week_id VARCHAR(25) NOT NULL,
+  UNIQUE (task_id, day_of_week, year_week_id),
   user_id INTEGER NOT NULL,
   CONSTRAINT fk_task_blocks_user_id
       FOREIGN KEY(user_id)
