@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { add } from "date-fns";
 import {
   InsertUserAsync,
   ReadUserByEmailAsync,
@@ -33,6 +34,7 @@ export const AuthenticateUserAsync = async (email, password, done) => {
       email: user.email,
       token: token,
       refreshToken: refreshToken,
+      refreshExpiration: add(new Date(), { hours: 24 }),
     });
   } catch (error) {
     return done(error, false);
