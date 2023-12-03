@@ -76,9 +76,6 @@ export const CreateTaskAsync = async (task, user, res) => {
     if (!task.description) {
       return res.sendStatus(400).send("You must provide a description.");
     }
-    if (!task.duration) {
-      return res.sendStatus(400).send("You must provide a duration.");
-    }
 
     const updatedTask = RandomizeDays(task, res);
 
@@ -101,9 +98,6 @@ export const EditTaskAsync = async (id, task, user, res) => {
     }
     if (!task.description) {
       return res.sendStatus(400).send("You must provide a description.");
-    }
-    if (!task.duration) {
-      return res.sendStatus(400).send("You must provide a duration.");
     }
 
     const updatedTask = RandomizeDays(task, res);

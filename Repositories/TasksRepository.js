@@ -28,9 +28,9 @@ export const InsertTaskAsync = async (task, user) => {
       task.isRandom,
       task.daysOfWeek,
       task.frequency,
-      task?.subGoalId || null,
+      task.subGoalId || null,
       user.id,
-      task.scheduledDay,
+      task.isRecurring ? null : task.scheduledDay,
     ],
   );
 };
@@ -46,7 +46,7 @@ export const UpdateTaskAsync = async (id, task) => {
       task.daysOfWeek,
       task.frequency,
       id,
-      task.scheduledDay,
+      task.isRecurring ? null : task.scheduledDay,
     ],
   );
 };
