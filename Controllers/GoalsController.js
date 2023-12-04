@@ -44,7 +44,7 @@ GoalsRouter.delete("/:id", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
     const goals = await DeleteGoalAsync(req.params.id, user, res);
-    return res.json(goals.rows);
+    return res.json(goals?.rows);
   } catch (e) {
     console.log(e.message);
   }
