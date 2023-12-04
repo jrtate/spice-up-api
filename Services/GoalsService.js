@@ -75,10 +75,6 @@ export const DeleteGoalAsync = async (id, user, res) => {
     if (!id) {
       return res.sendStatus(400).send("Must provide an ID.");
     }
-    const existingGoal = GetGoalByIdAsync(id, user, res);
-    if (!existingGoal) {
-      return res.status(204);
-    }
 
     return await DeleteGoalPsqlAsync(id, user);
   } catch (e) {
