@@ -11,14 +11,16 @@ import { GetCompletedGoalAsync } from "./GoalCompletionService.js";
 export const GetGoalsAsync = async (user, res) => {
   try {
     const goalList = await ReadGoalsAsync(user);
-    return await goalList?.rows?.map?.(async (goal) => {
-      return {
-        id: goal.id,
-        description: goal.description,
-        isCompleted: await GetCompletedGoalAsync(goal.id, user),
-        subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user, res),
-      };
-    });
+    return await goalList?.rows
+      ?.map?.(async (goal) => {
+        return {
+          id: goal.id,
+          description: goal.description,
+          isCompleted: await GetCompletedGoalAsync(goal.id, user),
+          subGoals: await GetSubGoalsByGoalIdAsync(goal.id, user, res),
+        };
+      })
+      ?.sort((a, b) => a.id - b.id);
   } catch (e) {
     console.log(e.message);
   }

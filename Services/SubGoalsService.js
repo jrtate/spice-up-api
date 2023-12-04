@@ -16,14 +16,18 @@ export const GetSubGoalsByGoalIdAsync = async (goalId, user, res) => {
     }
 
     const subGoalList = await ReadSubGoalByGoalIdAsync(goalId, user);
-    const mappedSubGoals = subGoalList?.rows?.map?.(async (subGoal) => {
-      return {
-        id: subGoal.id,
-        description: subGoal.description,
-        isCompleted: await GetCompletedSubGoalsAsync(subGoal.id, user),
-        tasks: await Promise.all(await GetTasksByGoalIdAsync(subGoal.id, user)),
-      };
-    });
+    const mappedSubGoals = subGoalList?.rows
+      ?.map?.(async (subGoal) => {
+        return {
+          id: subGoal.id,
+          description: subGoal.description,
+          isCompleted: await GetCompletedSubGoalsAsync(subGoal.id, user),
+          tasks: await Promise.all(
+            await GetTasksByGoalIdAsync(subGoal.id, user),
+          ),
+        };
+      })
+      ?.sort((a, b) => a.id - b.id);
     return Promise.all(mappedSubGoals);
   } catch (e) {
     console.log(e.message);

@@ -10,18 +10,20 @@ import {
 export const GetTasksAsync = async (user) => {
   try {
     const taskList = await ReadTasksAsync(user);
-    return taskList?.rows?.map?.((task) => {
-      return {
-        id: task.id,
-        description: task.description,
-        duration: task.duration,
-        isRecurring: task.is_recurring,
-        isRandom: task.is_random,
-        daysOfWeek: task.days_of_week,
-        frequency: task.frequency,
-        scheduledDay: task.scheduled_day,
-      };
-    });
+    return taskList?.rows
+      ?.map?.((task) => {
+        return {
+          id: task.id,
+          description: task.description,
+          duration: task.duration,
+          isRecurring: task.is_recurring,
+          isRandom: task.is_random,
+          daysOfWeek: task.days_of_week,
+          frequency: task.frequency,
+          scheduledDay: task.scheduled_day,
+        };
+      })
+      ?.sort((a, b) => a.id - b.id);
   } catch (e) {
     console.log(e.message);
   }
@@ -30,18 +32,20 @@ export const GetTasksAsync = async (user) => {
 export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
   try {
     const taskList = await ReadTasksByGoalIdAsync(subGoalId, user);
-    return taskList?.rows?.map?.((task) => {
-      return {
-        id: task.id,
-        description: task.description,
-        duration: task.duration,
-        isRecurring: task.is_recurring,
-        isRandom: task.is_random,
-        daysOfWeek: task.days_of_week,
-        frequency: task.frequency,
-        scheduledDay: task.scheduled_day,
-      };
-    });
+    return taskList?.rows
+      ?.map?.((task) => {
+        return {
+          id: task.id,
+          description: task.description,
+          duration: task.duration,
+          isRecurring: task.is_recurring,
+          isRandom: task.is_random,
+          daysOfWeek: task.days_of_week,
+          frequency: task.frequency,
+          scheduledDay: task.scheduled_day,
+        };
+      })
+      ?.sort((a, b) => a.id - b.id);
   } catch (e) {
     console.log(e.message);
   }
