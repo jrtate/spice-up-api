@@ -23,7 +23,7 @@ export const CompleteTaskAsync = async (completedTask, user, res) => {
     if (!completedTask.id) {
       return res.sendStatus(400).send("Must provide an ID.");
     }
-    if (!completedTask.completedDay) {
+    if (!completedTask.completedDay && completedTask.completedDay !== 0) {
       return res.sendStatus(400).send("Must provide completedDay.");
     }
     const isCompleted = ReadCompletedTaskAsync(completedTask.id, user);
