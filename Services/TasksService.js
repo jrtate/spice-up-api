@@ -130,45 +130,25 @@ export const DeleteTaskAsync = async (id, user, res) => {
 };
 
 const RandomizeDays = (task, res) => {
+  if (!task.isRecurring || !task.isRandom) return task;
+
   let updatedTask = task;
   // Assign random dates based on frequency, if user opted in
-  if (task.daysOfWeek.length === 0 && task.isRandom) {
-    if (!task.frequency) {
-      return res.sendStatus(400).send("Must set a frequency.");
-    }
-
-    const randomDayList = [];
-    Array.from(Array(task.frequency)).forEach(() => {
-      const rndInt = Math.floor(Math.random() * 7);
-      randomDayList.push(rndInt);
-    });
-
-    updatedTask.daysOfWeek = randomDayList;
-  } else if (task.daysOfWeek.length && task.isRandom) {
-    if (!task.frequency) {
-      return res.sendStatus(400).send("Must set a frequency.");
-    }
-    if (task.frequency > task.daysOfWeek.length) {
-      return res
-        .sendStatus(400)
-        .send(
-          "Must not set the frequency larger than days selected, if opting in to specific days.",
-        );
-    }
-
-    const selectedRandomDays = task.daysOfWeek;
-    const randomDayList = [];
-    Array.from(Array(task.frequency)).forEach(() => {
-      const max = Math.max(...selectedRandomDays);
-      const min = Math.min(...selectedRandomDays);
-
-      const randomDayFromSelection =
-        selectedRandomDays[Math.floor(Math.random() * (max - min + 1) + min)];
-      randomDayList.push(randomDayFromSelection);
-    });
-
-    updatedTask.daysOfWeek = randomDayList;
+  if (!task.frequency) {
+    return res.sendStatus(400).send("Must set a frequency.");
   }
+
+  const randomDayList = [];
+  Array.from(Array(task.frequency)).forEach(() => {
+    let rndInt = Math.floor(Math.random() * 7);
+    // Dont add days that already exist in the list more than once
+    while (randomDayList.some((day) => day === rndInt)) {
+      rndInt = Math.floor(Math.random() * 7);
+    }
+    randomDayList.push(rndInt);
+  });
+
+  updatedTask.daysOfWeek = randomDayList;
 
   return updatedTask;
 };
