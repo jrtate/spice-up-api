@@ -32,11 +32,12 @@ CREATE TABLE IF NOT EXISTS sub_goals(
 CREATE TABLE IF NOT EXISTS tasks(
   id SERIAL PRIMARY KEY,
   description VARCHAR(50),
-  duration INTEGER NOT NULL,
+  duration INTEGER NULL DEFAULT 15,
   is_recurring BOOLEAN NOT NULL DEFAULT TRUE,
   is_random BOOLEAN NOT NULL DEFAULT FALSE,
   days_of_week INTEGER[] NULL,
   frequency INTEGER NULL,
+  scheduled_day DATE NULL,
   sub_goal_id INTEGER NULL,
   CONSTRAINT fk_tasks_sub_goal_id
     FOREIGN KEY(sub_goal_id)
@@ -100,7 +101,6 @@ CREATE TABLE IF NOT EXISTS task_orders(
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
     ON DELETE CASCADE,
-  -- todo: replace with timestamp
   day_of_week INTEGER NOT NULL,
   UNIQUE (task_id, day_of_week),
   user_id INTEGER NOT NULL,
@@ -119,9 +119,9 @@ CREATE TABLE IF NOT EXISTS task_blocks(
     FOREIGN KEY(task_id)
     REFERENCES tasks(id)
     ON DELETE CASCADE,
-  -- todo: replace with timestamp
   day_of_week INTEGER NOT NULL,
-  UNIQUE (task_id, day_of_week),
+  year_week_id VARCHAR(25) NOT NULL,
+  UNIQUE (task_id, day_of_week, year_week_id),
   user_id INTEGER NOT NULL,
   CONSTRAINT fk_task_blocks_user_id
       FOREIGN KEY(user_id)

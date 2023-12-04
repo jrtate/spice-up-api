@@ -20,7 +20,7 @@ export const ReadTaskAsync = async (id, user) => {
 
 export const InsertTaskAsync = async (task, user) => {
   return await pool.query(
-    "INSERT INTO tasks (description, duration, is_recurring, is_random, days_of_week, frequency, sub_goal_id, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;",
+    "INSERT INTO tasks (description, duration, is_recurring, is_random, days_of_week, frequency, sub_goal_id, user_id, scheduled_day) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;",
     [
       task.description,
       task.duration,
@@ -28,15 +28,16 @@ export const InsertTaskAsync = async (task, user) => {
       task.isRandom,
       task.daysOfWeek,
       task.frequency,
-      task?.subGoalId || null,
+      task.subGoalId || null,
       user.id,
+      task.isRecurring ? null : task.scheduledDay,
     ],
   );
 };
 
 export const UpdateTaskAsync = async (id, task) => {
   return await pool.query(
-    "UPDATE tasks SET description = $1, duration = $2, is_recurring = $3, is_random = $4, days_of_week = $5, frequency = $6 WHERE id = $7 RETURNING *;",
+    "UPDATE tasks SET description = $1, duration = $2, is_recurring = $3, is_random = $4, days_of_week = $5, frequency = $6, scheduled_day = $8 WHERE id = $7 RETURNING *;",
     [
       task.description,
       task.duration,
@@ -45,6 +46,7 @@ export const UpdateTaskAsync = async (id, task) => {
       task.daysOfWeek,
       task.frequency,
       id,
+      task.isRecurring ? null : task.scheduledDay,
     ],
   );
 };
