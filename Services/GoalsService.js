@@ -80,7 +80,7 @@ export const DeleteGoalAsync = async (id, user, res) => {
       return res.status(204);
     }
 
-    return await DeleteGoalPsqlAsync(id);
+    return await DeleteGoalPsqlAsync(id, user);
   } catch (e) {
     console.log(e.message);
   }

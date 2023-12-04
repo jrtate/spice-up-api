@@ -62,7 +62,7 @@ export const EditSubGoalAsync = async (id, subGoal, user, res) => {
     }
 
     // Update
-    return await UpdateSubGoalAsync(id, subGoal);
+    return await UpdateSubGoalAsync(id, subGoal, user);
   } catch (e) {
     console.log(e.message);
   }
@@ -78,7 +78,7 @@ export const DeleteSubGoalAsync = async (id, user, res) => {
       return res.status(204);
     }
 
-    return await DeleteSubGoalPsqlAsync(id);
+    return await DeleteSubGoalPsqlAsync(id, user);
   } catch (e) {
     console.log(e.message);
   }

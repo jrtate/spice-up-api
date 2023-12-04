@@ -20,11 +20,14 @@ export const InsertGoalAsync = async (goal, user) => {
 
 export const UpdateGoalAsync = async (id, goal) => {
   return await pool.query(
-    "UPDATE goals SET description = $1 WHERE id = $2 RETURNING *;",
+    "UPDATE goals SET description = $1 WHERE id = $2 AND user_id=$2 RETURNING *;",
     [goal.description, id],
   );
 };
 
-export const DeleteGoalPsqlAsync = async (id) => {
-  return await pool.query("DELETE FROM goals WHERE id=$1 RETURNING *;", [id]);
+export const DeleteGoalPsqlAsync = async (id, user) => {
+  return await pool.query(
+    "DELETE FROM goals WHERE id=$1 AND user_id=$2 RETURNING *;",
+    [id, user.id],
+  );
 };

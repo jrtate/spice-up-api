@@ -107,7 +107,7 @@ export const EditTaskAsync = async (id, task, user, res) => {
     const updatedTask = RandomizeDays(task, res);
 
     // Update
-    return await UpdateTaskAsync(id, updatedTask);
+    return await UpdateTaskAsync(id, updatedTask, user);
   } catch (e) {
     console.log(e.message);
   }
@@ -123,7 +123,7 @@ export const DeleteTaskAsync = async (id, user, res) => {
       return res.status(204);
     }
 
-    return await DeleteTaskPsqlAsync(id);
+    return await DeleteTaskPsqlAsync(id, user);
   } catch (e) {
     console.log(e.message);
   }

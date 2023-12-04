@@ -35,9 +35,9 @@ export const InsertTaskAsync = async (task, user) => {
   );
 };
 
-export const UpdateTaskAsync = async (id, task) => {
+export const UpdateTaskAsync = async (id, task, user) => {
   return await pool.query(
-    "UPDATE tasks SET description = $1, duration = $2, is_recurring = $3, is_random = $4, days_of_week = $5, frequency = $6, scheduled_day = $8 WHERE id = $7 RETURNING *;",
+    "UPDATE tasks SET description = $1, duration = $2, is_recurring = $3, is_random = $4, days_of_week = $5, frequency = $6, scheduled_day = $8 WHERE id = $7 AND user_id = $9 RETURNING *;",
     [
       task.description,
       task.duration,
@@ -47,10 +47,14 @@ export const UpdateTaskAsync = async (id, task) => {
       task.frequency,
       id,
       task.isRecurring ? null : task.scheduledDay,
+      user.id,
     ],
   );
 };
 
-export const DeleteTaskPsqlAsync = async (id) => {
-  return await pool.query("DELETE FROM tasks WHERE id=$1 RETURNING *;", [id]);
+export const DeleteTaskPsqlAsync = async (id, user) => {
+  return await pool.query(
+    "DELETE FROM tasks WHERE id=$1 AND user_id=$2 RETURNING *;",
+    [id, user.id],
+  );
 };

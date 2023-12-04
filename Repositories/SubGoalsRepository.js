@@ -21,15 +21,16 @@ export const InsertSubGoalAsync = async (subGoal, user) => {
   );
 };
 
-export const UpdateSubGoalAsync = async (id, subGoal) => {
+export const UpdateSubGoalAsync = async (id, subGoal, user) => {
   return await pool.query(
-    "UPDATE sub_goals SET description = $1 WHERE id = $2 RETURNING *;",
-    [subGoal.description, id],
+    "UPDATE sub_goals SET description = $1 WHERE id = $2 AND user_id=$3 RETURNING *;",
+    [subGoal.description, id, user.id],
   );
 };
 
-export const DeleteSubGoalPsqlAsync = async (id) => {
-  return await pool.query("DELETE FROM sub_goals WHERE id=$1 RETURNING *;", [
-    id,
-  ]);
+export const DeleteSubGoalPsqlAsync = async (id, user) => {
+  return await pool.query(
+    "DELETE FROM sub_goals WHERE id=$1 AND user_id=$2 RETURNING *;",
+    [id, user.id],
+  );
 };
