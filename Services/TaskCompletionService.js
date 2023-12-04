@@ -2,6 +2,7 @@ import {
   CreateCompletedTaskAsync,
   DeleteCompletedTaskAsync,
   ReadCompletedTaskAsync,
+  ReadIsTaskCompletedTodayAsync,
 } from "../Repositories/TaskCompletionRepository.js";
 
 export const GetCompletedTasksAsync = async (id, user) => {
@@ -26,8 +27,8 @@ export const CompleteTaskAsync = async (completedTask, user, res) => {
     if (!completedTask.completedDay && completedTask.completedDay !== 0) {
       return res.sendStatus(400).send("Must provide completedDay.");
     }
-    const isCompleted = ReadCompletedTaskAsync(completedTask.id, user);
-    if (!isCompleted) {
+    const isCompleted = ReadIsTaskCompletedTodayAsync(completedTask.id, user);
+    if (isCompleted.rows > 0) {
       return res.sendStatus(204);
     }
 

@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS completed_tasks(
     ON DELETE CASCADE,
   user_id INTEGER NOT NULL,
   date_created VARCHAR(25) NOT NULL,
+  UNIQUE (task_id, date_created),
   CONSTRAINT fk_completed_tasks_user_id
     FOREIGN KEY(user_id)
     REFERENCES users(id)
