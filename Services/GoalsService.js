@@ -64,7 +64,7 @@ export const EditGoalAsync = async (id, goal, user, res) => {
     }
 
     // Update
-    return await UpdateGoalAsync(id, goal);
+    return await UpdateGoalAsync(id, goal, user);
   } catch (e) {
     console.log(e.message);
   }
