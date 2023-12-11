@@ -15,7 +15,7 @@ TaskRouter.get("", async (req, res) => {
   try {
     const user = await AuthenticateToken(req, res);
     const tasks = await GetTasksAsync(user);
-    // todo: move to service layer and add to get by id
+    // todo: move to service layer
     const mappedTasks = tasks.map(async (task) => {
       const completedTasks = await GetCompletedTasksAsync(task.id, user);
       const matchingCompletedTasks = completedTasks?.filter(

@@ -6,6 +6,7 @@ import {
   ReadTasksByGoalIdAsync,
   UpdateTaskAsync,
 } from "../Repositories/TasksRepository.js";
+import { GetCompletedTasksAsync } from "./TaskCompletionService.js";
 
 export const GetTasksAsync = async (user) => {
   try {
@@ -33,13 +34,19 @@ export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
   try {
     const taskList = await ReadTasksByGoalIdAsync(subGoalId, user);
     return taskList?.rows
-      ?.map?.((task) => {
+      ?.map?.(async (task) => {
+        const completedTasks = await GetCompletedTasksAsync(task.id, user);
+        const matchingCompletedTasks = completedTasks?.filter(
+          (ct) =>
+            task?.daysOfWeek?.includes?.(ct.completedDay) || !task.isRecurring,
+        );
         return {
           id: task.id,
           description: task.description,
           duration: task.duration,
           isRecurring: task.is_recurring,
           isRandom: task.is_random,
+          isCompleted: matchingCompletedTasks.length > 0,
           daysOfWeek: task.days_of_week,
           frequency: task.frequency,
           scheduledDay: task.scheduled_day,
@@ -54,12 +61,18 @@ export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
 export const GetTaskByIdAsync = async (id, user) => {
   try {
     const task = await ReadTaskAsync(id, user);
+    const completedTasks = await GetCompletedTasksAsync(task.id, user);
+    const matchingCompletedTasks = completedTasks?.filter(
+      (ct) =>
+        task?.daysOfWeek?.includes?.(ct.completedDay) || !task.isRecurring,
+    );
     return {
       id: task.id,
       description: task.description,
       duration: task.duration,
       isRecurring: task.is_recurring,
       isRandom: task.is_random,
+      isCompleted: matchingCompletedTasks.length > 0,
       daysOfWeek: task.days_of_week,
       frequency: task.frequency,
       scheduledDay: task.scheduled_day,
