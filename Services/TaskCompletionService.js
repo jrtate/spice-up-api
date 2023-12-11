@@ -12,6 +12,7 @@ export const GetCompletedTasksAsync = async (id, user) => {
       return {
         id: completedTask.id,
         completedDay: completedTask.completed_day,
+        dateCreated: completedTask.date_created,
       };
     });
   } catch (e) {

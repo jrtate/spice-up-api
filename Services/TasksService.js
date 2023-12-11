@@ -7,6 +7,7 @@ import {
   UpdateTaskAsync,
 } from "../Repositories/TasksRepository.js";
 import { GetCompletedTasksAsync } from "./TaskCompletionService.js";
+import { getDay, getWeek, getYear } from "date-fns";
 
 export const GetTasksAsync = async (user) => {
   try {
@@ -38,7 +39,12 @@ export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
         const completedTasks = await GetCompletedTasksAsync(task.id, user);
         const matchingCompletedTasks = completedTasks?.filter(
           (ct) =>
-            task?.daysOfWeek?.includes?.(ct.completedDay) || !task.isRecurring,
+            (task?.daysOfWeek?.includes?.(ct.completedDay) &&
+              // todo: make this a regular date with format instead
+              `${getYear(new Date())}-${getWeek(new Date())}-${getDay(
+                new Date(),
+              )}` === `${ct.dateCreated}`) ||
+            !task.isRecurring,
         );
         return {
           id: task.id,
@@ -64,7 +70,12 @@ export const GetTaskByIdAsync = async (id, user) => {
     const completedTasks = await GetCompletedTasksAsync(task.id, user);
     const matchingCompletedTasks = completedTasks?.filter(
       (ct) =>
-        task?.daysOfWeek?.includes?.(ct.completedDay) || !task.isRecurring,
+        (task?.daysOfWeek?.includes?.(ct.completedDay) &&
+          // todo: make this a regular date with format instead
+          `${getYear(new Date())}-${getWeek(new Date())}-${getDay(
+            new Date(),
+          )}` === `${ct.dateCreated}`) ||
+        !task.isRecurring,
     );
     return {
       id: task.id,

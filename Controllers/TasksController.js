@@ -8,6 +8,7 @@ import {
 } from "../Services/TasksService.js";
 import { GetCompletedTasksAsync } from "../Services/TaskCompletionService.js";
 import { AuthenticateToken } from "../Services/AuthService.js";
+import { getDay, getWeek, getYear } from "date-fns";
 
 const TaskRouter = express.Router();
 
@@ -19,7 +20,13 @@ TaskRouter.get("", async (req, res) => {
     const mappedTasks = tasks.map(async (task) => {
       const completedTasks = await GetCompletedTasksAsync(task.id, user);
       const matchingCompletedTasks = completedTasks?.filter(
-        (ct) => task.daysOfWeek.includes(ct.completedDay) || !task.isRecurring,
+        (ct) =>
+          (task?.daysOfWeek?.includes?.(ct.completedDay) &&
+            // todo: make this a regular date with format instead
+            `${getYear(new Date())}-${getWeek(new Date())}-${getDay(
+              new Date(),
+            )}` === `${ct.dateCreated}`) ||
+          !task.isRecurring,
       );
       task.isCompleted = matchingCompletedTasks.length > 0;
       return task;
