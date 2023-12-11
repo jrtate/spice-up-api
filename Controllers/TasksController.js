@@ -18,8 +18,8 @@ TaskRouter.get("", async (req, res) => {
     // todo: move to service layer and add to get by id
     const mappedTasks = tasks.map(async (task) => {
       const completedTasks = await GetCompletedTasksAsync(task.id, user);
-      const matchingCompletedTasks = completedTasks?.filter((ct) =>
-        task.daysOfWeek.includes(ct.completedDay),
+      const matchingCompletedTasks = completedTasks?.filter(
+        (ct) => task.daysOfWeek.includes(ct.completedDay) || !task.isRecurring,
       );
       task.isCompleted = matchingCompletedTasks.length > 0;
       return task;
