@@ -18,10 +18,10 @@ export const InsertGoalAsync = async (goal, user) => {
   );
 };
 
-export const UpdateGoalAsync = async (id, goal) => {
+export const UpdateGoalAsync = async (id, goal, user) => {
   return await pool.query(
-    "UPDATE goals SET description = $1 WHERE id = $2 AND user_id=$2 RETURNING *;",
-    [goal.description, id],
+    "UPDATE goals SET description = $1 WHERE id = $2 AND user_id=$3 RETURNING *;",
+    [goal.description, id, user.id],
   );
 };
 

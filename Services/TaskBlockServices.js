@@ -14,6 +14,7 @@ export const GetTaskBlocksAsync = async (user) => {
         totalBlocks: taskBlock.total_blocks,
         completedBlocks: taskBlock.completed_blocks,
         dayOfWeek: taskBlock.day_of_week,
+        yearWeekId: taskBlock.year_week_id,
       };
     });
   } catch (e) {
@@ -31,6 +32,7 @@ export const GetTaskBlockByTaskIdAsync = async (taskId, user) => {
         totalBlocks: taskBlock.total_blocks,
         completedBlocks: taskBlock.completed_blocks,
         dayOfWeek: taskBlock.day_of_week,
+        yearWeekId: taskBlock.year_week_id,
       };
     });
   } catch (e) {
