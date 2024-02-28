@@ -6,6 +6,8 @@ import {
   ReadTasksByGoalIdAsync,
   UpdateTaskAsync,
 } from "../Repositories/TasksRepository.js";
+import { GetCompletedTasksAsync } from "./TaskCompletionService.js";
+import { getDay, getWeek, getYear } from "date-fns";
 
 export const GetTasksAsync = async (user) => {
   try {
@@ -33,13 +35,24 @@ export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
   try {
     const taskList = await ReadTasksByGoalIdAsync(subGoalId, user);
     return taskList?.rows
-      ?.map?.((task) => {
+      ?.map?.(async (task) => {
+        const completedTasks = await GetCompletedTasksAsync(task.id, user);
+        const matchingCompletedTasks = completedTasks?.filter(
+          (ct) =>
+            (task?.daysOfWeek?.includes?.(ct.completedDay) &&
+              // todo: make this a regular date with format instead
+              `${getYear(new Date())}-${getWeek(new Date())}-${getDay(
+                new Date(),
+              )}` === `${ct.dateCreated}`) ||
+            !task.isRecurring,
+        );
         return {
           id: task.id,
           description: task.description,
           duration: task.duration,
           isRecurring: task.is_recurring,
           isRandom: task.is_random,
+          isCompleted: matchingCompletedTasks.length > 0,
           daysOfWeek: task.days_of_week,
           frequency: task.frequency,
           scheduledDay: task.scheduled_day,
@@ -54,12 +67,23 @@ export const GetTasksByGoalIdAsync = async (subGoalId, user) => {
 export const GetTaskByIdAsync = async (id, user) => {
   try {
     const task = await ReadTaskAsync(id, user);
+    const completedTasks = await GetCompletedTasksAsync(task.id, user);
+    const matchingCompletedTasks = completedTasks?.filter(
+      (ct) =>
+        (task?.daysOfWeek?.includes?.(ct.completedDay) &&
+          // todo: make this a regular date with format instead
+          `${getYear(new Date())}-${getWeek(new Date())}-${getDay(
+            new Date(),
+          )}` === `${ct.dateCreated}`) ||
+        !task.isRecurring,
+    );
     return {
       id: task.id,
       description: task.description,
       duration: task.duration,
       isRecurring: task.is_recurring,
       isRandom: task.is_random,
+      isCompleted: matchingCompletedTasks.length > 0,
       daysOfWeek: task.days_of_week,
       frequency: task.frequency,
       scheduledDay: task.scheduled_day,
@@ -71,12 +95,6 @@ export const GetTaskByIdAsync = async (id, user) => {
 
 export const CreateTaskAsync = async (task, user, res) => {
   try {
-    // Validate
-    if (task.daysOfWeek.length === 0 && !task.isRandom && !task.scheduledDay) {
-      return res
-        .sendStatus(400)
-        .send("Must select at least one day to schedule.");
-    }
     if (!task.description) {
       return res.sendStatus(400).send("You must provide a description.");
     }
@@ -96,9 +114,6 @@ export const EditTaskAsync = async (id, task, user, res) => {
     const existingTask = GetTaskByIdAsync(id, user);
     if (!id || !existingTask) {
       return res.status(400).send("Task does not exist.");
-    }
-    if (task.daysOfWeek.length === 0 && !task.isRandom && !task.scheduledDay) {
-      return res.status(400).send("Must select at least one day to schedule.");
     }
     if (!task.description) {
       return res.sendStatus(400).send("You must provide a description.");
@@ -130,7 +145,8 @@ export const DeleteTaskAsync = async (id, user, res) => {
 };
 
 const RandomizeDays = (task, res) => {
-  if (!task.isRecurring || !task.isRandom) return task;
+  if (!task.isRecurring || !task.isRandom || !task?.daysOfWeek?.length)
+    return task;
 
   let updatedTask = task;
   // Assign random dates based on frequency, if user opted in
